@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -26,6 +26,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - run: npm install
+    - run: npm run build
+    - run: pm2 start dist/src/main.js — name nestjs-app
     - run: |
         touch .env
         echo "${{ secrets.DEV_FILE }}" > .env
+    - run: pm2 stop nestjs-app || true
+    - run: pm2 save
