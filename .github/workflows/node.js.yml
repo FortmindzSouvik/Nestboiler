@@ -28,7 +28,7 @@ jobs:
     - run: npm ci
     - run: npm install
     - run: npm run build
-    - run: pm2 start dist/main.js — name nestjs-app
+    - run: pm2 restart dist/main.js --name nestjs-app
     - run: |
         touch .env
         echo "${{ secrets.DEV_FILE }}" > .env
