@@ -7,12 +7,9 @@ on:
   push:
     branches: [ "production" ]
 
-
 jobs:
   build:
-
     runs-on: self-hosted
-
     strategy:
       matrix:
         node-version: [18.x]
@@ -29,7 +26,7 @@ jobs:
     - run: npm install
     - run: npm run build
     - run: pm2 stop nestjs-app || true
-    - run: pm2 restart dist/main.js --name nestjs-app
+    - run: pm2 start dist/main.js --name nestjs-app
     - run: pm2 save
     - run: |
         touch .env
