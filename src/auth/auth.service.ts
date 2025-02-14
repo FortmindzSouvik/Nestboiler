@@ -1,29 +1,29 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import { compare } from 'bcrypt';
+import { Injectable } from '@nestjs/common';
+import { LoginDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from './config/jwt.config';
+import { RegisterDto } from './dto/register-auth.dto';
+import { User } from 'src/users/schema/users.schema';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UsersService, private jwtService: JwtService) { }
 
-    async validateUser(email: string, password: string) {
-        // const user = await this.userService.findByEmail(email);
-        // if (!user)
-        //     throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
+  constructor(private readonly jwtService: JwtService) { }
 
-        // const isPasswordMatch = await compare(password, user.password);
-        // if (!isPasswordMatch)
-        //     throw new HttpException('invalid credential', HttpStatus.UNAUTHORIZED);
-        // return user;
-    }
 
-    async validateLogin(user: any) {
-        const payload = { sub: user.id };
-        return {
-            access_token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET })
-        }
-    }
+  findAll() {
+    return `This action returns all auth`;
+  }
 
+  findOne(id: number) {
+    return `This action returns a #${id} auth`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} auth`;
+  }
+
+  validateUser(userData: LoginDto) {
+    return this.jwtService.sign(userData, { secret: process.env.JWT_SECRET });
+  }
 }

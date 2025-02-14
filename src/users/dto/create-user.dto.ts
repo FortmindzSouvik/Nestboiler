@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty } from "class-validator";
-import { Unit } from "src/unit/schema/units.schema";
+
 
 export class CreateUserDto {
 
@@ -12,7 +12,6 @@ export class CreateUserDto {
     @IsNotEmpty()
     password: string;
 
-    @IsNotEmpty()
-    unitId: Unit
+
 
 }

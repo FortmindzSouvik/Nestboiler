@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
-import { Unit } from '../../unit/schema/units.schema';
 import mongoose from 'mongoose';
 
 
@@ -21,8 +20,6 @@ export class User {
     @Prop({ default: Date.now })
     updatedAt: Date;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Unit', required: true })
-    unitId: Unit;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

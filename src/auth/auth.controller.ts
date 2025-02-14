@@ -1,22 +1,50 @@
-import { Controller, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalGuard } from './guards/local-auth.guard';
-import { JWTGuard } from './guards/jwt.guard';
+import { LoginDto } from './dto/login-auth.dto';
+import { RegisterDto } from './dto/register-auth.dto';
 
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService, private readonly userService: UsersService) { }
 
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(LocalGuard)
-  @Post('login')
-  async login(@Request() req) {
-    const accessToken = await this.authService.validateLogin(req.user);
-    const res = {
-      ...req.user,
-      ...accessToken,
-    }
-    return res;
+
+
+  @Post('register')
+  public async registration(@Body() registerDto: RegisterDto) {
+    const data = await this.userService.create(registerDto);
+    console.log(data);
+    return data;
+
   }
+
+  @Post('login')
+  public async login(@Body() loginDto: LoginDto) {
+    const data = this.authService.validateUser(loginDto);
+    console.log(data);
+    return data;
+
+  }
+
+  @Get()
+  findAll() {
+    return this.authService.findAll();
+  }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.authService.findOne(+id);
+  // }
+
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  //   return this.authService.update(+id, updateAuthDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.authService.remove(+id);
+  // }
 }
